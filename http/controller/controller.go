@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"database/sql"
 
@@ -54,11 +55,26 @@ func shortenIt(str string) string {
 }
 
 func (shortener *Shortener) StoreInDb() {
-	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/qok_url_shortener")
+	mysqlUrl := os.Getenv("MYSQL_URL")
+	mysqlDB := os.Getenv("MYSQL_DB")
+	dataSourceName := fmt.Sprintf("root:root@tcp(%s)/%s", mysqlUrl, mysqlDB)
+	db, err := sql.Open("mysql", dataSourceName)
+
 	if err != nil {
 		panic(err.Error())
 	}
 	defer db.Close()
+
+	var tableQuery = `CREATE TABLE IF NOT EXISTS urls 
+	(id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	 long_url VARCHAR(100) NOT NULL,
+	 short_url VARCHAR(50),
+	 reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP );`
+	create, err := db.Query(tableQuery)
+	if err != nil {
+		panic(err.Error())
+	}
+	create.Close()
 
 	var query = "INSERT IGNORE INTO urls (`long_url`,`short_url`) VALUES (?, ?)"
 

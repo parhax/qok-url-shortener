@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  qok-http:
+    build: ./http
+    environment: 
+        - MYSQL_URL=mysqldb:3306
+        - MYSQL_DB=qok_url_shortener
+    volumes: 
+      - './http:/app'
+    ports:
+      - 8787:8787
+
+  mysqldb:
+    image:  mysql
+    container_name: qok_shortener_mysql
+    environment: 
+      - MYSQL_DATABASE=qok_url_shortener
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3308:3306   
