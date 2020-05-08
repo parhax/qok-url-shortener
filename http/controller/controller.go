@@ -11,8 +11,6 @@ import (
 )
 
 func ShortenHandler(w http.ResponseWriter, req *http.Request) {
-	// vars := mux.Vars(req)
-	// longUrl := vars["longUrl"]
 
 	body, _ := ioutil.ReadAll(req.Body)
 	var longUrl string
@@ -22,14 +20,8 @@ func ShortenHandler(w http.ResponseWriter, req *http.Request) {
 	}
 	fmt.Printf("%#v", longUrl)
 
-	// shortener := Shortener{
-	// 	longUrl:  longUrl,
-	// 	shortUrl: shortenIt(longUrl),
-	// }
-
 	var shortener model.Shortener
 
-	// shortener = shortener.SetLongurl(longUrl)
 	shortener.SetUrls(longUrl)
 	shortener.StoreInDb()
 
