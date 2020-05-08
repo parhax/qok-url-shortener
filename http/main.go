@@ -6,11 +6,11 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"qok.com/url_shortener/controller"
+	"qok.com/url_shortener/http/controller"
 )
 
 func main() {
-	fmt.Print("QoK Url Shortener app is running !!")
+	fmt.Print("QoK Url Shortener app is running :) !")
 	r := mux.NewRouter()
 
 	r.HandleFunc("/shorten", controller.ShortenHandler).Methods("POST")

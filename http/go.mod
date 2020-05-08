@@ -1,4 +1,4 @@
-module qok.com/url_shortener
+module qok.com/url_shortener/http
 
 go 1.13
 

@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  qok-http:
+  qok-shortener-http:
     build: ./http
     environment: 
         - MYSQL_URL=mysqldb:3306
