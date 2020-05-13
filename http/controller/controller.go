@@ -4,21 +4,25 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 
+	"qok.com/url_shortener/http/logwrapper"
 	"qok.com/url_shortener/http/model"
 )
 
 func ShortenHandler(w http.ResponseWriter, req *http.Request) {
+	logger := logwrapper.Load()
 
-	body, _ := ioutil.ReadAll(req.Body)
-	var longUrl string
-	err := json.Unmarshal(body, &longUrl)
+	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
-	fmt.Printf("%#v", longUrl)
+	var longUrl string
+	unmarshErr := json.Unmarshal(body, &longUrl)
+
+	if unmarshErr != nil {
+		logger.Fatal(unmarshErr)
+	}
 
 	var shortener model.Shortener
 
