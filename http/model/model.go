@@ -24,10 +24,6 @@ func (sh *Shortener) ShortUrl() string {
 }
 
 func (shortener *Shortener) StoreInDb() {
-	// mysqlUrl := os.Getenv("MYSQL_URL")
-	// mysqlDB := os.Getenv("MYSQL_DB")
-	// dataSourceName := fmt.Sprintf("root:root@tcp(%s)/%s", mysqlUrl, mysqlDB)
-	// db, err := sql.Open("mysql", dataSourceName)
 	msql, err := db.GetMysqlConnection()
 	if err != nil {
 		panic(err.Error())
