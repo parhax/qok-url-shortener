@@ -1,28 +1,17 @@
 package model
 
 import (
-	"crypto/sha1"
 	"database/sql"
-	"encoding/base64"
-	"fmt"
 
 	"qok.com/url_shortener/http/db"
 )
 
 type Shortener struct {
-	longUrl  string
-	shortUrl string
+	LongUrl  string
+	ShortUrl string
 }
 
-func (shortener *Shortener) SetUrls(long_url string) {
-	shortener.longUrl = long_url
-	shortener.shortUrl = shortenLong(long_url)
-}
-
-func (sh *Shortener) ShortUrl() string {
-	return sh.shortUrl
-}
-
+//StoreInDB store shorted url in database
 func (shortener *Shortener) StoreInDb() {
 	msql, err := db.GetMysqlConnection()
 	if err != nil {
@@ -34,7 +23,7 @@ func (shortener *Shortener) StoreInDb() {
 
 	var query = "INSERT IGNORE INTO urls (`long_url`,`short_url`) VALUES (?, ?)"
 
-	insert, err := msql.Query(query, shortener.longUrl, shortener.shortUrl)
+	insert, err := msql.Query(query, shortener.LongUrl, shortener.ShortUrl)
 
 	if err != nil {
 		panic(err.Error())
@@ -42,15 +31,6 @@ func (shortener *Shortener) StoreInDb() {
 
 	insert.Close()
 
-}
-
-func shortenLong(str string) string {
-	h := sha1.New()
-	h.Write([]byte(str))
-	shortedStr := base64.URLEncoding.EncodeToString(h.Sum(nil))
-	shortedUrl := "q.ok/" + shortedStr[:8]
-	fmt.Println(str, shortedStr)
-	return shortedUrl
 }
 
 func checkForTableExistance(msql *sql.DB) {
